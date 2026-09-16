@@ -14,6 +14,8 @@ This is an instruction-driven workflow, not a hosted application, deployment ser
 
 ## Install
 
+The [illustrated installation guide](docs/guide.md#4-install-the-harness) covers **VS Code**, the **standalone GitHub Copilot desktop app**, and **GitHub Copilot CLI**. VS Code is the original target host. App and CLI file discovery is documented, but full A/B/C execution on those clients remains unverified; missing model/tool/approval capabilities must block execution. This repository is not a plugin marketplace.
+
 1. Download this repository as a ZIP from GitHub's **Code > Download ZIP**, extract it and open its folder in VS Code. Alternatively, use your normal Git workflow outside an Azure Rocket operational run.
 2. Review the four files in [.github/agents](.github/agents), the two [.github/skills](.github/skills), and the [scoped instructions](.github/instructions/azure-rocket.instructions.md) before trusting the workspace.
 3. Check that your Copilot account/host supports the configured model identifiers: `GPT-6 Astra (copilot)` for coordinator/B and `Claude Opus 5 (copilot)` for A/C. These are package requirements, not a claim of universal availability. No silent model fallback is allowed.

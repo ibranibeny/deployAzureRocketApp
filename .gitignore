@@ -7,6 +7,9 @@ runs/
 *.zip
 *.png
 *.webp
+!/assets/installation/vscode-agents.png
+!/assets/installation/copilot-app-customize.png
+!/assets/installation/copilot-cli-agents.png
 node_modules/
 .DS_Store
 Thumbs.db

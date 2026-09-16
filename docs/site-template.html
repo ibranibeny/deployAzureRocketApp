@@ -93,6 +93,8 @@
     .contents footer { border-top: 1px solid var(--cp-border); margin-top: 1.5rem; padding-top: 1rem; font-size: 12px; color: var(--cp-text-muted); }
     main { min-width: 0; max-width: 850px; }
     article { overflow-wrap: anywhere; }
+    article img { display: block; max-width: 100%; height: auto; border: 1px solid var(--cp-border); border-radius: 4px; margin: 1.5rem 0 .75rem; }
+    article p:has(> a > img) + p { color: var(--cp-text-muted); font-size: 13px; line-height: 1.6; }
     h1, h2, h3 { line-height: 1.22; font-weight: 650; color: var(--cp-text); }
     h1 { font-size: 36px; margin: 0 0 1rem; }
     h2 { font-size: 26px; margin: 3.5rem 0 1.5rem; padding-top: 2rem; border-top: 1px solid var(--cp-border); }
@@ -154,7 +156,7 @@
       <details class="contents" open>
         <summary>Contents</summary>
         <nav aria-label="Chapters">@@NAVIGATION@@</nav>
-        <footer>4 operational agents<br>2 bundled skills<br>VS Code + GitHub Copilot</footer>
+        <footer>4 operational agents<br>2 bundled skills<br>Setup: VS Code, Copilot app, CLI</footer>
       </details>
     </aside>
     <main id="guide" tabindex="-1">

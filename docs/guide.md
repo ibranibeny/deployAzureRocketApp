@@ -105,6 +105,24 @@ If the prerequisites and approvals do pass, only A executes, one mutation attemp
 
 ## 4. Install The Harness
 
+### Choose Your Copilot Client
+
+The same repository contains all four agent profiles, both skills and the safety references. Start with a project-local copy so the files stay together. This is not a VS Code extension, a standalone application installer or a Copilot plugin marketplace.
+
+| Client | Add the package | Find the coordinator | Verification boundary |
+| --- | --- | --- | --- |
+| VS Code | Open the extracted repository folder | Chat agent picker: **deployAzureRocketApp** | Original target host; actual models, worker tools and approvals still need verification. |
+| GitHub Copilot desktop app | **Projects + > Local folder or repository** | Prompt-box agent picker or `/agent` | Documented discovery route; full A/B/C execution has not been verified. |
+| GitHub Copilot CLI | Start `copilot` in the extracted repository root | `/agent`; filename selector is `azure-rocket-workflow` | Local version/help checked; full A/B/C execution has not been verified. |
+
+The app below means the **standalone GitHub Copilot desktop app**, not GitHub Desktop, GitHub Mobile, Microsoft Copilot or the GitHub.com cloud agent. A client supporting agent files does not guarantee it supports this package's exact model, tool and delegation contracts.
+
+**About the screenshots:** Figures 2-4 are Playwright captures of Microsoft/GitHub-published UI images, inspected on 16 September 2026. They illustrate where to find the controls, not deployAzureRocketApp installed on those clients. Sample projects, accounts, models and agent names belong to the publishers' examples. Follow the numbered steps and package requirements, not the example settings. Select an image to inspect the larger version. [Image sources and capture notes](../assets/installation/README.md).
+
+### Install In VS Code
+
+Follow Steps 1-6 below for the original target host. The desktop app and CLI sections follow these shared file and trust checks.
+
 ### Step 1: Prepare The Host
 
 Use a current VS Code installation with GitHub Copilot Chat, custom-agent/skill support and an account entitled to the models you intend to use. Verify the exact configured identifiers in your host: **GPT-6 Astra (copilot)** and **Claude Opus 5 (copilot)**. Availability varies by host and account; this repository does not provide those models or a fallback.
@@ -154,6 +172,10 @@ Use VS Code's MCP server management to inspect the registered names, startup sta
 
 ### Step 5: Check Agent Discovery And Tool Exposure
 
+[![Official VS Code Chat Customizations editor with Agents and Skills tabs and New Agent Workspace menu](../assets/installation/vscode-agents.png)](../assets/installation/vscode-agents.png)
+
+*Figure 2. Microsoft documentation screenshot, captured with Playwright. Open Chat's Configure Chat gear, then Agents, or run **Chat: Open Customizations**. Inspect the shipped profiles; do not use Generate Agent or New Agent to replace them. The example workspace and models are not this harness. [Source: VS Code custom agents](https://code.visualstudio.com/docs/agent-customization/custom-agents).*
+
 Open Chat's agent picker and select **deployAzureRocketApp**. The three worker names must also be discoverable by the host. If the entry is absent, check that the project root is open, frontmatter is valid, the filename ends in `.agent.md`, and your host enables custom agents. Reload VS Code only after checking those basics.
 
 Ask for a local-only readiness inspection:
@@ -172,6 +194,54 @@ If actual A tool exposure needs a worker invocation, request a separate **local 
 ### Step 6: Verify Installation, Not Deployment
 
 Installation is ready for source-only use when the files are discoverable, instructions and skills can be read, relative references resolve, and tool/model limitations are honestly recorded. Readiness for cloud execution is a later and stricter checkpoint. No legacy collector, PowerShell runner or passing legacy test suite is required to install this package.
+
+### Install In GitHub Copilot Desktop App
+
+[![Official GitHub Copilot desktop app Customize view showing Skills MCP and Installed tabs](../assets/installation/copilot-app-customize.png)](../assets/installation/copilot-app-customize.png)
+
+*Figure 3. GitHub's published macOS Customize view, captured with Playwright. After adding this package as a project, use **Skills** to inspect the two bundled skills and **MCP / Installed** to review servers. The screenshot does not show the Add project dialog or deployAzureRocketApp installed. Its sample projects and Featured entries are not prerequisites; UI labels can vary by release/platform. [Source: GitHub app Customize announcement, 25 August 2026](https://github.blog/changelog/2026-08-25-github-copilot-app-customize-tab-is-generally-available/).*
+
+1. Follow GitHub's [app quickstart](https://docs.github.com/en/copilot/get-started/quickstart-copilot-app) and use its [official download page](https://github.com/features/ai/github-app) for the installer offered for your platform. Git must be installed. Your account needs appropriate Copilot access, and an organization can govern the app separately from the CLI. A working CLI login is not proof that app access is enabled. Keep the package's fixed model requirements; the app's general BYOK support is not permission to replace them.
+2. Open the app and select **Sign in to GitHub**. Complete authentication in the host UI yourself. Do not put tokens, passwords or account settings into this public repository.
+3. Download and extract the complete Azure Rocket package as described in Step 2 above. In the app sidebar, click **+** beside **Projects**, then **Local folder or repository** under **Add project from**. Select the package root containing `.github`, not just the `agents` subfolder. Alternatively, **GitHub repository** can clone `ibranibeny/deployAzureRocketApp` through your normal operator workflow. Do not use **Customize > Plugins > Install** for this repository: it is not packaged as a plugin marketplace.
+4. Start a session for that project. Where the location selector is offered, choose **your local repository** rather than a new working tree or cloud sandbox. Choose **Interactive**, not **Autopilot**. Do not submit a task yet. Review any automatic initialization or hooks before allowing them; creating a worktree or running setup scripts is not part of this installation guide.
+5. In the prompt-box agent picker, look for **deployAzureRocketApp**, or type `/agent` to open agent selection. Verify that the four profiles come from this project's `.github/agents/` directory. If the profile is not discovered or is rejected, stop and record the host error; do not regenerate it, remove restrictions or rename configured models to force it to load.
+6. Open **Customize > Skills**. Confirm **azure-rocket-repository-learning** and **azure-rocket-awesome-copilot** are available from this repository. GitHub documents that repository and CLI skills are available to the app; this does not establish that every referenced tool or instruction is active.
+7. Review **Customize > MCP**, including **Installed**, for existing server registrations. GitHub documents reuse of repository/CLI MCP servers, but the shipped `.vscode/mcp.json` is a VS Code configuration, not proof that this app has loaded or accepted it. Follow the app/CLI MCP documentation and review each trust request; do not overwrite an existing configuration or automatically install Docker/images/servers.
+8. Verify the actual selected models for all four roles, source instructions, allowed worker delegation, A's exact `apply_patch` capability and independent host confirmations. Do not choose **Auto** as a substitute for the fixed model contract. If all local requirements can be demonstrated, use the local-only readiness prompt above; otherwise retain **Blocked** status and report the missing capability.
+
+Do not use the app's parallel sessions, cloud sandbox, automations, extra review agents or PR creation as a shortcut around this harness's single-flight A/B/C workflow. The app's **Plan** or **Interactive** label is not a deterministic approval gate. No desktop installation or end-to-end desktop deployment was performed to produce this guide.
+
+Sources: [App quickstart](https://docs.github.com/en/copilot/get-started/quickstart-copilot-app), [app customization](https://docs.github.com/en/copilot/how-tos/github-copilot-app/customize-github-copilot-app), and [session locations and modes](https://docs.github.com/en/copilot/how-tos/github-copilot-app/agent-sessions), checked 16 September 2026.
+
+### Install In GitHub Copilot CLI
+
+[![Official older GitHub Copilot CLI Select Custom Agent menu with Accessibility Expert selected](../assets/installation/copilot-cli-agents.png)](../assets/installation/copilot-cli-agents.png)
+
+*Figure 4. GitHub's published `/agent` picker example, captured with Playwright. It shows CLI **0.0.365**, the publisher's account and **Accessibility Expert**, not this package. For this guide, select **deployAzureRocketApp** from your project's discovered agents. Current CLI help was checked separately on **1.0.84-3**; the old example's connection indicator is not evidence that your MCP servers work. [Source: GitHub CLI custom-agent tutorial, 9 June 2026](https://github.blog/ai-and-ml/github-copilot/from-one-off-prompts-to-workflows-how-to-use-custom-agents-in-github-copilot-cli/).*
+
+Use the current **GitHub Copilot CLI**, not the retired `gh copilot` extension. This package is a repository of customizations, not a CLI plugin or marketplace. Download and extract the complete package as above; do not install only its coordinator file, because the workers, skills and safety references must remain available.
+
+1. Install Copilot CLI yourself using the [official getting-started guide](https://docs.github.com/en/copilot/how-tos/copilot-cli/cli-getting-started). On Windows, the documented command is `winget install GitHub.Copilot`. Installation is an operator action, not an automatic harness step. Authenticate through the CLI's `/login` flow; never paste credentials into a prompt or report.
+2. In a terminal, change to the extracted package root. For example, when the extracted folder is directly under your current directory:
+
+  ```powershell
+  Set-Location ./deployAzureRocketApp-main
+  copilot --version
+  copilot
+  ```
+
+  Adjust only the folder name to your actual extraction. Review the directory trust request. Trust only that project, not every folder on the machine.
+3. Enter `/agent` inside the interactive CLI. Select **deployAzureRocketApp** from the discovered custom agents. Do not select **Create new agent**: the four profiles already exist in `.github/agents/`. If they are missing, check the current directory and restart the CLI after adding the files. Review duplicate user-level agents under `~/.copilot/agents/`; they can shadow project definitions.
+4. Enter `/skills list`, then `/skills info azure-rocket-repository-learning` and `/skills info azure-rocket-awesome-copilot`. Confirm the paths point to this repository. Use `/skills reload` if skills were added during the session. Discovery does not mean a skill has already been applied to a task.
+5. Before giving the agent a task, inspect its actual model, tools, instruction loading, worker delegation and MCP configuration. The CLI uses its own MCP configuration; do not assume `.vscode/mcp.json` is consumed unchanged. Use `/mcp` and the [CLI MCP guide](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-mcp-servers) to review the required registered servers. This package does not supply a CLI-specific MCP configuration or compatibility adapter.
+6. Only after local compatibility checks, use the local-only readiness prompt in Step 5 above. Do not start Azure reads or execution merely because the agent appears in the picker.
+
+The equivalent interactive startup selector is `copilot --agent azure-rocket-workflow`: GitHub documents `--agent` as the profile **filename without `.agent.md`**, whereas the picker displays the YAML name **deployAzureRocketApp**. No prompt is included in that command. Do not add `--allow-all`, `--allow-all-tools`, `--autopilot`, `--no-ask-user`, or a non-interactive deployment prompt to this setup procedure.
+
+**Compatibility status:** the author verified CLI version `1.0.84-3` and its help output, not an end-to-end A/B/C run. Shared file discovery does not establish support for `vscode/askQuestions`, exact `apply_patch` exposure, registered MCP names, fixed models or host-selected model receipts. GitHub documents that unrecognized tool names are ignored. If any required behavior cannot be demonstrated, keep the workflow **Blocked**; do not remove tool restrictions, substitute a model, bypass worker ownership or treat a generic CLI session as the verified coordinator.
+
+Sources: [Creating and using CLI custom agents](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/create-custom-agents-for-cli), [CLI skills](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/create-skills), and [custom-agent configuration](https://docs.github.com/en/copilot/reference/custom-agents-configuration), checked 16 September 2026.
 
 ## 5. Worked Tutorial: AnalyzeYourSQLLogwithArc
 
