@@ -84,6 +84,69 @@ Select **deployAzureRocketApp** in VS Code Chat. Its backing file is [azure-rock
 
 The coordinator turns your request into bounded tasks, carries consent and tool restrictions to workers, retains source and observation evidence, and explains what can happen next. It reads the two bundled skills in sequence: learn the workload first, then assess suitable community methods. It never treats repository instructions as permission to expand its own powers.
 
+### Harness Component Breakdown
+
+This map shows what is inside the package, what the host and operator must supply, and who owns the resulting evidence. It complements the operational sequence in Chapter 1; it is not a deployment architecture or proof of runtime compatibility.
+
+```mermaid
+flowchart TB
+  subgraph EXTERNAL["Outside the package: host and operator"]
+    direction LR
+    HOST["Copilot host<br/>Models, tools and trusted MCP"]
+    APPROVAL["Exact operator approval<br/>Independent host confirmation"]
+    HOST ~~~ APPROVAL
+  end
+  subgraph PACKAGE["Repository package"]
+    direction TB
+    CO["deployAzureRocketApp<br/>Coordinator"]
+    subgraph SKILLS["Two skills: coordinator reads"]
+      direction TB
+      LEARN["azure-rocket-repository-learning<br/>Pin source / prerequisites"]
+      REVIEW["azure-rocket-awesome-copilot<br/>Review community methods"]
+      LEARN -->|then| REVIEW
+    end
+    subgraph AGENTS["Three workers: no delegation"]
+      direction TB
+      ADEPLOY["A Deploy<br/>Inspect / prepare<br/>Execute / reconcile"]
+      BREPORT["B Report<br/>English installation report"]
+      COBSERVE["C Observe<br/>Read-only evidence<br/>Returns data; no file edits"]
+      ADEPLOY ~~~ BREPORT ~~~ COBSERVE
+    end
+    subgraph CONFIG["Configuration and instructions"]
+      direction LR
+      RULES["Scoped instructions<br/>Roles + safety contracts"]
+      MCP[".vscode/mcp.json<br/>Learn + registry-only Terraform"]
+      RULES ~~~ MCP
+    end
+    CONFIG -.->|constrains / configures| CO
+    CO -->|reads in order| SKILLS
+    CO -->|delegates only| AGENTS
+  end
+  subgraph OUTPUTS["Outputs: runs/runId"]
+    direction LR
+    CONTEXT["Coordinator writes<br/>Context / sources / candidates<br/>Persists C snapshot + dashboard"]
+    PLAN["A writes<br/>Plan / IaC / preflight<br/>Command evidence"]
+    REPORT["B writes<br/>installation.md"]
+    CONTEXT ~~~ PLAN ~~~ REPORT
+  end
+  EXTERNAL -.->|supplies capabilities and execution gates| PACKAGE
+  PACKAGE -->|role-owned evidence| OUTPUTS
+  classDef agent fill:#E8F0FE,stroke:#1967D2,color:#174EA6;
+  classDef skill fill:#E6F4EA,stroke:#137333,color:#0B3D20;
+  classDef config fill:#FEF7E0,stroke:#B06000,color:#4A2900;
+  classDef gate fill:#FCE8E6,stroke:#C5221F,color:#5C1512;
+  classDef evidence fill:#F1F3F4,stroke:#5F6368,color:#202124;
+  class CO,ADEPLOY,BREPORT,COBSERVE agent;
+  class LEARN,REVIEW skill;
+  class RULES,MCP,HOST config;
+  class APPROVAL gate;
+  class CONTEXT,PLAN,REPORT evidence;
+```
+
+Blue nodes are agents, green nodes are skills, amber nodes are configuration or host dependencies, red is the approval boundary, and gray nodes are evidence. Solid arrows show reading, delegation or evidence ownership; dotted arrows show constraints and dependencies. Group membership and vertical placement do not imply execution order or authorize parallel execution. Only A may mutate an approved target; C observes after mutation is quiescent and never writes files itself. The coordinator persists C's returned observations and static dashboard proposal.
+
+The two skills are methods read by the coordinator, not additional worker agents. The MCP file registers only Learn and registry-only Terraform; it neither bundles every tool named by the agents nor grants access. Host capabilities (including A's required `apply_patch` tool), fixed models with no fallback, instruction loading and independent approvals must be verified separately on each Copilot client. The approval boundary requires scoped consent, a reviewed exact plan and a fresh preview, not a generic permission to deploy. See the roles below for exact configured models and ownership.
+
 ### Roles And Ownership
 
 | Role | Configured model | Owns | Must not do |

@@ -130,6 +130,7 @@
       .layout { display: block; padding: 0; }
       main { max-width: none; }
       .table-scroll { overflow: visible; }
+      .workflow-visual svg { min-width: 0 !important; }
       h2, h3 { break-after: avoid; }
       pre, tr { break-inside: avoid; }
     }
@@ -207,33 +208,45 @@
     })();
   </script>
   <script type="module">
-    const source = document.querySelector("pre.mermaid");
-    if (source) {
+    const sources = [...document.querySelectorAll("pre.mermaid")];
+    const renderer = import("https://cdn.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.esm.min.mjs")
+      .then(({ default: mermaid }) => {
+        mermaid.initialize({ startOnLoad: false, securityLevel: "strict", theme: "neutral", flowchart: { htmlLabels: false } });
+        return mermaid;
+      }).catch(() => null);
+    for (const [index, source] of sources.entries()) {
+      let heading = source.previousElementSibling;
+      while (heading && !heading.matches("h2, h3")) heading = heading.previousElementSibling;
+      const title = heading?.textContent || "Agent diagram";
       const figure = document.createElement("figure");
       figure.className = "workflow";
       const visual = document.createElement("div");
       visual.className = "workflow-visual";
       visual.tabIndex = 0;
       visual.setAttribute("role", "region");
-      visual.setAttribute("aria-label", "Agent workflow diagram");
+      visual.setAttribute("aria-label", title);
       const caption = document.createElement("figcaption");
-      caption.textContent = "Rendering workflow. The source remains below.";
+      caption.textContent = `Rendering ${title}. The source remains below.`;
       caption.setAttribute("role", "status");
       source.before(figure);
       figure.append(visual, caption, source);
       try {
-        const { default: mermaid } = await import("https://cdn.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.esm.min.mjs");
-        mermaid.initialize({ startOnLoad: false, securityLevel: "strict", theme: "neutral", flowchart: { htmlLabels: false } });
-        const result = await mermaid.render("agent-workflow", source.textContent);
+        const mermaid = await renderer;
+        if (!mermaid) throw new Error("Diagram renderer unavailable");
+        const result = await mermaid.render(`agent-diagram-${index + 1}`, source.textContent);
         visual.innerHTML = result.svg;
-        caption.textContent = "Figure 1. Source learning, approval, execution and evidence ownership.";
+        const svg = visual.querySelector("svg");
+        svg.style.minWidth = `${Math.ceil(svg.viewBox.baseVal.width * .85)}px`;
+        caption.textContent = index === 0
+          ? "Figure 1. Source learning, approval, execution and evidence ownership."
+          : `${title}. Package components and runtime boundaries, not deployment evidence.`;
         const details = document.createElement("details");
         const summary = document.createElement("summary");
         summary.textContent = "Mermaid source";
         figure.append(details);
         details.append(summary, source);
       } catch {
-        caption.textContent = "The diagram renderer is unavailable. Read the workflow source below.";
+        caption.textContent = `${title} could not render. Its Mermaid source remains below.`;
       }
     }
   </script>
