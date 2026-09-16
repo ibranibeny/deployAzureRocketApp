@@ -15,7 +15,7 @@
 - [x] Add authentic, attributed screenshots to assets/installation; clearly distinguish official example UI from local verification. Add only narrow screenshot exceptions to .gitignore.
 - [x] Add responsive image styling to docs/site-template.html and regenerate index.html with correct image paths. Check desktop/mobile rendering, image dimensions, anchors and caption accuracy.
 - [x] Review the explicit changed-file list for private data and unchanged agent contracts.
-- [ ] Commit/push only reviewed files in this isolated publishing repository and verify the live Pages update.
+- [x] Commit/push only reviewed files in this isolated publishing repository and verify the live Pages update.
 
 ## Verification Boundaries
 
@@ -29,3 +29,11 @@ CLI version/help was inspected without a model task. No desktop app installation
 - Relative documentation/image links resolved; Markdown and HTML editor diagnostics reported no errors.
 - Agent profiles, skills, scoped instructions, MCP configuration, operational guide and safety references remained unchanged from the published baseline.
 - Private-data pattern checks and Git whitespace checks passed. PNG ignore exceptions name only the three reviewed screenshot files.
+
+## Publication
+
+- Published content commit: `9f780e8d859b9915f4947f09c18d15de9296c582` in [ibranibeny/deployAzureRocketApp](https://github.com/ibranibeny/deployAzureRocketApp).
+- Remote guide and all screenshot asset blob hashes matched the reviewed local files.
+- After Pages completed its build, Playwright verified [the live guide](https://ibranibeny.github.io/deployAzureRocketApp/): HTTP 200, all three client sections and images, seven chapters, one diagram, no JavaScript page errors, and no horizontal overflow at desktop or mobile width.
+- The first live check occurred while Pages was building and saw the previous version; it was not counted as a pass. The subsequent check verified the new content.
+- This completion record does not change the generated page. No client installation, Azure operation or full A/B/C runtime verification was performed.
