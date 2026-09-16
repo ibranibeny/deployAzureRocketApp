@@ -1,0 +1,12 @@
+runs/
+.azure/
+.env
+.env.*
+!.env.example
+*.log
+*.zip
+*.png
+*.webp
+node_modules/
+.DS_Store
+Thumbs.db

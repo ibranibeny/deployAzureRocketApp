@@ -1,0 +1,13 @@
+{
+  "servers": {
+    "microsoft-learn": {
+      "type": "http",
+      "url": "https://learn.microsoft.com/api/mcp"
+    },
+    "terraform": {
+      "type": "stdio",
+      "command": "docker",
+      "args": ["run", "--pull=never", "--rm", "-i", "--env", "ENABLE_TF_OPERATIONS=false", "hashicorp/terraform-mcp-server:1.3.0", "--toolsets=registry"]
+    }
+  }
+}

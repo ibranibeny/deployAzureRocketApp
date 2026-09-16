@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Install deployAzureRocketApp in VS Code. Learn its four agents, two skills and step-by-step Azure workload preparation workflow.">
+  <meta name="referrer" content="no-referrer">
+  <title>deployAzureRocketApp | Installation and Field Guide</title>
+  <link rel="icon" href="data:,">
+  <script>
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("scoutTheme");
+      const theme =
+        param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f7f4ef;
+      --cp-bg-elevated: #fcfbf8;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #f5f5f5;
+      --cp-border: #dedede;
+      --cp-border-strong: #919191;
+      --cp-text: #242424;
+      --cp-text-muted: #5c5c5c;
+      --cp-text-soft: #6f6f6f;
+      --cp-accent: #b11f4b;
+      --cp-accent-hover: #9a1a41;
+      --cp-accent-soft: rgba(177, 31, 75, 0.08);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16a34a;
+      --cp-danger: #dc2626;
+      --cp-warning: #f59e0b;
+      --cp-link: #0078d4;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+      --cp-overlay: rgba(255, 255, 255, 0.8);
+      --cp-panel: rgba(255, 255, 255, 0.86);
+      --cp-panel-strong: rgba(255, 255, 255, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.55);
+      --cp-highlight: rgba(177, 31, 75, 0.12);
+    }
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --cp-bg: #3d3b3a;
+      --cp-bg-elevated: #343231;
+      --cp-surface: #292929;
+      --cp-surface-soft: #2e2e2e;
+      --cp-border: #474747;
+      --cp-border-strong: #5f5f5f;
+      --cp-text: #dedede;
+      --cp-text-muted: #919191;
+      --cp-text-soft: #b0b0b0;
+      --cp-accent: #fd8ea1;
+      --cp-accent-hover: #fb7b91;
+      --cp-accent-soft: rgba(253, 142, 161, 0.14);
+      --cp-accent-fg: #1a1a1a;
+      --cp-success: #4ade80;
+      --cp-danger: #f87171;
+      --cp-warning: #fbbf24;
+      --cp-link: #4da6ff;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+      --cp-overlay: rgba(41, 41, 41, 0.88);
+      --cp-panel: rgba(41, 41, 41, 0.72);
+      --cp-panel-strong: rgba(41, 41, 41, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.04);
+      --cp-highlight: rgba(253, 142, 161, 0.12);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-padding-top: 2rem; }
+    body { margin: 0; background: var(--cp-surface); color: var(--cp-text); font: 16px/1.7 "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif; letter-spacing: 0; }
+    a { color: var(--cp-link); text-underline-offset: 3px; overflow-wrap: anywhere; }
+    a:hover { color: var(--cp-accent-hover); }
+    :focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 4px; }
+    ::selection { background: var(--cp-highlight); }
+    .skip { position: absolute; left: 1rem; top: -5rem; background: var(--cp-surface); padding: .5rem 1rem; z-index: 3; }
+    .skip:focus { top: 1rem; }
+    .masthead { border-top: 5px solid var(--cp-accent); border-bottom: 1px solid var(--cp-border); background: var(--cp-surface-soft); }
+    .masthead-inner { max-width: 1320px; margin: auto; padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem 2rem; flex-wrap: wrap; }
+    .brand { color: var(--cp-text); font-size: 18px; font-weight: 650; text-decoration: none; }
+    .header-links { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; font-size: 14px; }
+    .header-links a { font-weight: 600; }
+    select { background: var(--cp-surface); color: var(--cp-text); border: 1px solid var(--cp-border-strong); border-radius: 4px; font: inherit; padding: .4rem; }
+    .layout { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 4rem; max-width: 1240px; margin: auto; padding: 3rem 2rem 6rem; }
+    aside { min-width: 0; }
+    .contents { position: sticky; top: 2rem; max-height: calc(100vh - 4rem); overflow-y: auto; padding: 0 1rem 1rem 0; }
+    summary { color: var(--cp-text-muted); font-size: 14px; font-weight: 650; cursor: pointer; }
+    .contents nav { margin-top: 1rem; display: grid; gap: .35rem; }
+    .contents nav a { color: var(--cp-text-muted); text-decoration: none; font-size: 14px; padding: .5rem .75rem; border-left: 2px solid var(--cp-border); }
+    .contents nav a:hover, .contents nav a[aria-current="location"] { color: var(--cp-accent); border-color: var(--cp-accent); background: var(--cp-accent-soft); }
+    .contents footer { border-top: 1px solid var(--cp-border); margin-top: 1.5rem; padding-top: 1rem; font-size: 12px; color: var(--cp-text-muted); }
+    main { min-width: 0; max-width: 850px; }
+    article { overflow-wrap: anywhere; }
+    h1, h2, h3 { line-height: 1.22; font-weight: 650; color: var(--cp-text); }
+    h1 { font-size: 36px; margin: 0 0 1rem; }
+    h2 { font-size: 26px; margin: 3.5rem 0 1.5rem; padding-top: 2rem; border-top: 1px solid var(--cp-border); }
+    h3 { font-size: 20px; margin: 2rem 0 1rem; }
+    p { margin: 0 0 1.15rem; }
+    li { margin-bottom: .6rem; }
+    code, pre { font-family: Consolas, "Courier New", Courier, monospace; font-size: 14px; }
+    :not(pre) > code { padding: .12rem .28rem; background: var(--cp-surface-soft); border-radius: 3px; }
+    pre { margin: 1.5rem 0; padding: 1.25rem; border-left: 3px solid var(--cp-border-strong); background: var(--cp-surface-soft); white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.6; }
+    .table-scroll { max-width: 100%; overflow-x: auto; margin: 1.5rem 0; }
+    table { width: 100%; min-width: 520px; border-collapse: collapse; font-size: 14px; line-height: 1.55; }
+    th, td { padding: .9rem .8rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--cp-border); }
+    th { background: var(--cp-surface-soft); color: var(--cp-text); font-weight: 650; }
+    .workflow { margin: 2rem 0; }
+    .workflow-visual { overflow-x: auto; }
+    .workflow-visual svg { display: block; min-width: 500px; width: 100%; height: auto; margin: auto; }
+    .workflow figcaption { color: var(--cp-text-muted); font-size: 13px; margin-top: .7rem; }
+    .workflow pre { white-space: pre; overflow: auto; }
+    .endnote { color: var(--cp-text-muted); font-size: 13px; margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--cp-border); }
+    @media (max-width: 800px) {
+      .layout { grid-template-columns: minmax(0, 1fr); padding: 1.5rem 1rem 4rem; gap: 2rem; }
+      .masthead-inner { padding: 1rem; }
+      .header-links { gap: 1rem; }
+      .contents { position: static; max-height: none; border-bottom: 1px solid var(--cp-border); padding-bottom: 1rem; }
+      .contents footer { display: none; }
+      h1 { font-size: 27px; }
+      h2 { font-size: 23px; }
+      h3 { font-size: 19px; }
+      pre { padding: 1rem; font-size: 13px; }
+    }
+    @media print {
+      aside, .masthead, .skip, .endnote { display: none; }
+      .layout { display: block; padding: 0; }
+      main { max-width: none; }
+      .table-scroll { overflow: visible; }
+      h2, h3 { break-after: avoid; }
+      pre, tr { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#guide">Skip to guide</a>
+  <header class="masthead">
+    <div class="masthead-inner">
+      <a class="brand" href="#guide">Azure Rocket / Field Guide</a>
+      <nav class="header-links" aria-label="Repository">
+        <a href="https://github.com/ibranibeny/deployAzureRocketApp">GitHub</a>
+        <a href="https://github.com/ibranibeny/deployAzureRocketApp/archive/refs/heads/main.zip">Download package</a>
+        <select id="theme" aria-label="Color theme">
+          <option value="system">System theme</option>
+          <option value="light">Light theme</option>
+          <option value="dark">Dark theme</option>
+        </select>
+      </nav>
+    </div>
+  </header>
+  <div class="layout">
+    <aside>
+      <details class="contents" open>
+        <summary>Contents</summary>
+        <nav aria-label="Chapters"><a href="#1-overview-of-an-agentic-harness">1. Overview Of An Agentic Harness</a><a href="#2-overview-of-skills">2. Overview Of Skills</a><a href="#3-meet-deployazurerocketapp">3. Meet deployAzureRocketApp</a><a href="#4-install-the-harness">4. Install The Harness</a><a href="#5-worked-tutorial-analyzeyoursqllogwitharc">5. Worked Tutorial: AnalyzeYourSQLLogwithArc</a><a href="#6-outputs-and-troubleshooting">6. Outputs And Troubleshooting</a><a href="#7-references-and-boundaries">7. References And Boundaries</a></nav>
+        <footer>4 operational agents<br>2 bundled skills<br>VS Code + GitHub Copilot</footer>
+      </details>
+    </aside>
+    <main id="guide" tabindex="-1">
+      <article><h1 id="deployazurerocketapp">deployAzureRocketApp</h1><p>Installation and field guide for engineers using GitHub Copilot in VS Code.</p><p><strong>Edition: 16 September 2026.</strong> This guide installs and explains the harness. It does not certify a successful Azure deployment. Start with source-only learning; cloud operations require separate scope, evidence and approvals.</p><h2 id="1-overview-of-an-agentic-harness">1. Overview Of An Agentic Harness</h2><p>A model can propose a command. An agent can choose tools and act on a task. An <strong>agentic harness</strong> adds the surrounding workflow: which agent owns each phase, which inputs it receives, which tools it may use, what evidence it must return, and when work must stop for approval.</p><p>In this repository the harness is implemented as VS Code custom-agent Markdown, reusable skills and scoped instructions. GitHub Copilot and the host provide model invocation and tools. There is no background service, autonomous cloud operator, special PowerShell execution engine or hosted chatbot to install.</p><p>Consider a request to deploy a repository. Instead of equating a generated command with success, the coordinator first asks what the repository actually deploys, pins its source, records prerequisites and establishes ownership. A prepares a plan; the user and host control mutation approval; B records outcomes; C observes the approved target. Failures remain visible.</p><h3 id="the-four-layers">The Four Layers</h3><table><thead><tr><th>Layer</th><th>Purpose</th><th>What it does not prove</th></tr></thead><tbody><tr><td>Model</td><td>Reason about the supplied task and evidence</td><td>A configured model name is not a host invocation receipt</td></tr><tr><td>Agent</td><td>Define a role, tool scope and responsibilities</td><td>Prompt restrictions are not Azure RBAC or an operating-system sandbox</td></tr><tr><td>Skill</td><td>Supply a reusable, task-specific method</td><td>Loading a skill grants no cloud permission</td></tr><tr><td>Harness</td><td>Coordinate phases, approvals, evidence and reporting</td><td>An instruction workflow is not a trusted approval-enforcing runtime</td></tr></tbody></table><h3 id="the-operational-flow">The Operational Flow</h3><pre class="mermaid">flowchart TD
+  U["User: repository URL and goal"] --&gt; L["Coordinator: pin and learn source"]
+  L --&gt; S["Confirm scope, owner, budget and read consent"]
+  S --&gt; A["A Deploy: prepare exact plan and preview"]
+  A --&gt; G{"Evidence, policy and approvals satisfied?"}
+  G -- No --&gt; X["Blocked: preserve evidence and report"]
+  G -- Yes --&gt; E["A Deploy: one approved mutation at a time"]
+  E --&gt; Q{"Execution quiescent?"}
+  Q -- No --&gt; X
+  Q -- Yes --&gt; C["C Observe: bounded read-only snapshot"]
+  Q -- Yes --&gt; B["B Report: preliminary report"]
+  C --&gt; R["A Reconcile: approved readback"]
+  B --&gt; F["B Report: final installation outcome"]
+  R --&gt; F
+  X --&gt; F
+  classDef learn fill:#E6F4EA,stroke:#137333,color:#0B3D20;
+  classDef gate fill:#FEF7E0,stroke:#B06000,color:#4A2900;
+  classDef blocked fill:#FCE8E6,stroke:#C5221F,color:#5C1512;
+  class U,L,S,A,C,B,R,F learn;
+  class G,Q gate;
+  class E,X blocked;
+</pre><p>Green identifies learning/reporting phases, amber approval decisions, and red mutation or blocked paths. The figure is a workflow, not live deployment evidence. Only the coordinator delegates. Mutations are never parallelized; observation begins only after A stops mutating. B may draft independently, but marks C's missing results Pending.</p><h2 id="2-overview-of-skills">2. Overview Of Skills</h2><p>A skill is a discoverable folder containing <code>SKILL.md</code>, with a short YAML description and detailed instructions. The description tells the agent when the skill applies. Supporting references can be bundled when needed; these two skills are self-contained Markdown files.</p><table><thead><tr><th>Customization</th><th>Typical location</th><th>Role in this package</th></tr></thead><tbody><tr><td>Custom agent</td><td><code>.github/agents/*.agent.md</code></td><td>Persona, allowed tools, model and delegation boundary</td></tr><tr><td>Skill</td><td><code>.github/skills/&lt;name&gt;/SKILL.md</code></td><td>On-demand method for a specific class of task</td></tr><tr><td>Scoped instruction</td><td><code>.github/instructions/*.instructions.md</code></td><td>Repository rules applied to matching files</td></tr><tr><td>MCP configuration</td><td><code>.vscode/mcp.json</code></td><td>Connection definitions for external tools</td></tr></tbody></table><h3 id="skill-1-repository-learning">Skill 1: Repository Learning</h3><p><a href="https://github.com/ibranibeny/deployAzureRocketApp/blob/main/.github/skills/azure-rocket-repository-learning/SKILL.md">azure-rocket-repository-learning</a> resolves a supplied repository or workshop URL to authoritative source. It pins the ref to an immutable commit, inspects deployment instructions and dependencies, preserves native procedures and records licensing, prerequisites and manual actions.</p><p>For GitHub Pages inputs, it follows explicit source links rather than guessing a repository from the website name. A page and a commit are different evidence: pinning the source does not pin the live page. Downloaded files are retained as inert evidence, not executed.</p><p>Its successful planning outcome is <code>ReadyForPlanning</code>, not permission to deploy. Missing content, unclear ownership or incompatible script behavior stays visible.</p><h3 id="skill-2-awesome-copilot-review">Skill 2: Awesome Copilot Review</h3><p><a href="https://github.com/ibranibeny/deployAzureRocketApp/blob/main/.github/skills/azure-rocket-awesome-copilot/SKILL.md">azure-rocket-awesome-copilot</a> reviews potentially useful agent/skill methodologies from a pinned <code>github/awesome-copilot</code> tree after source learning. It reads complete candidates and references, checks tool assumptions and licenses, and records Select, Reject or Blocked decisions.</p><p>It does <strong>not</strong> install community content automatically, import its tool permissions or allow nested delegation. A selected method remains evidence supplied to the existing roles. Selecting a candidate, loading a skill and actually using its method are three different events.</p><h3 id="what-is-not-bundled">What Is Not Bundled</h3><p>There is no embedded copy of the Awesome Copilot catalog, a deployment runner, the SQL workshop, a paid model entitlement or third-party Azure skills. Global skills available on the author's machine are not silently included or prerequisites unless explicitly required by the source or a reviewed task.</p><h2 id="3-meet-deployazurerocketapp">3. Meet deployAzureRocketApp</h2><p>Select <strong>deployAzureRocketApp</strong> in VS Code Chat. Its backing file is <a href="https://github.com/ibranibeny/deployAzureRocketApp/blob/main/.github/agents/azure-rocket-workflow.agent.md">azure-rocket-workflow.agent.md</a>. The agent name, not the filename, is the user-facing entry point.</p><p>The coordinator turns your request into bounded tasks, carries consent and tool restrictions to workers, retains source and observation evidence, and explains what can happen next. It reads the two bundled skills in sequence: learn the workload first, then assess suitable community methods. It never treats repository instructions as permission to expand its own powers.</p><h3 id="roles-and-ownership">Roles And Ownership</h3><table><thead><tr><th>Role</th><th>Configured model</th><th>Owns</th><th>Must not do</th></tr></thead><tbody><tr><td>deployAzureRocketApp</td><td>GPT-6 Astra (copilot)</td><td>Run context, source evidence, candidate manifest, persisted observations</td><td>Azure CLI or cloud mutation itself</td></tr><tr><td>Azure Rocket A Deploy</td><td>Claude Opus 5 (copilot)</td><td>Plan, IaC, preflight and command evidence</td><td>Delegate; advance prepare to execute within one invocation</td></tr><tr><td>Azure Rocket B Report</td><td>GPT-6 Astra (copilot)</td><td>English installation report</td><td>Execute commands, query Azure or approve changes</td></tr><tr><td>Azure Rocket C Observe</td><td>Claude Opus 5 (copilot)</td><td>Returned read-only observations and dashboard proposal</td><td>Mutate Azure or write files directly</td></tr></tbody></table><p>A has four separate phases: <strong>inspect</strong>, <strong>prepare</strong>, <strong>execute</strong>, <strong>reconcile</strong>. An inspect task hashes local retained files. Prepare builds evidence and a proposal. Execute requires a new approved packet. Reconcile checks outcomes without repairing resources.</p><p>C separates inventory, ResourceHealth, separately scoped Service Health, application checks and actual billed costs. Its dashboard is a static <strong>Snapshot</strong>, not live monitoring. Unknown costs are never represented as zero, and quota is never confused with guaranteed capacity.</p><h3 id="a-narrative-example">A Narrative Example</h3><p>You provide the SQL log workshop URL. The coordinator learns that the repository deploys an application around an existing Arc-enabled SQL Server, rather than provisioning that SQL host from scratch. It asks for the exact target and owner before Azure reads. A checks the approved environment and proposes native steps. If the Arc prerequisite cannot be reached or A lacks its required editing tool, the run stops before mutation and B writes a blocked report. That report is a valid workflow outcome, but it is not a successful installation.</p><p>If the prerequisites and approvals do pass, only A executes, one mutation attempt at a time. C then collects bounded evidence, approved frontend checks exercise the actual application, and B distinguishes infrastructure creation from application readiness. A tool success or a plausible final answer never replaces those checks.</p><h2 id="4-install-the-harness">4. Install The Harness</h2><h3 id="step-1-prepare-the-host">Step 1: Prepare The Host</h3><p>Use a current VS Code installation with GitHub Copilot Chat, custom-agent/skill support and an account entitled to the models you intend to use. Verify the exact configured identifiers in your host: <strong>GPT-6 Astra (copilot)</strong> and <strong>Claude Opus 5 (copilot)</strong>. Availability varies by host and account; this repository does not provide those models or a fallback.</p><p>If the host cannot expose the required model or host-selected invocation evidence, local explanation may continue marked Unverified, but model-dependent Azure access stays blocked. Do not rename another model and call it the same configuration.</p><p>For future Azure preparation, install and authenticate the approved Azure CLI yourself according to your organization's process. Native Az PowerShell workloads require their own matching context; Azure CLI login does not verify the Az context. Bicep, Terraform, Docker and workload-specific extensions are conditional on the reviewed procedure, not automatically installed by the harness. No Azure authentication is needed to read the guide or inspect source locally.</p><h3 id="step-2-obtain-the-repository">Step 2: Obtain The Repository</h3><p>Open <a href="https://github.com/ibranibeny/deployAzureRocketApp">the GitHub repository</a>, choose <strong>Code &gt; Download ZIP</strong>, extract it, and use <strong>File &gt; Open Folder</strong> in VS Code. Open the extracted project root, not its parent directory.</p><p>If you prefer Git, use your normal installation workflow outside an Azure Rocket operational run. Runtime no-Git restrictions are not an instruction to change another repository's Git state. Never use force-overwrite scaffolding on an existing project.</p><h3 id="step-3-check-file-placement">Step 3: Check File Placement</h3><p>The root should contain the following discoverable customizations:</p><pre><code class="language-text">.github/agents/azure-rocket-workflow.agent.md
+.github/agents/azure-rocket-a-deploy.agent.md
+.github/agents/azure-rocket-b-report.agent.md
+.github/agents/azure-rocket-c-observe.agent.md
+.github/skills/azure-rocket-repository-learning/SKILL.md
+.github/skills/azure-rocket-awesome-copilot/SKILL.md
+.github/instructions/azure-rocket.instructions.md
+.vscode/mcp.json
+</code></pre><p>Keep the <a href="https://github.com/ibranibeny/deployAzureRocketApp/blob/main/docs/how-to/run-azure-rocket.md">operational guide</a> and <a href="https://github.com/ibranibeny/deployAzureRocketApp/blob/main/docs/reference/l400-pre-deployment-review.md">safety reference</a> alongside those files. Agent instructions reference them. For an existing project, review and merge files individually. Preserve existing instructions and MCP servers; do not replace <code>.github</code> or <code>.vscode</code> wholesale. A duplicate agent name must be resolved deliberately before testing discovery.</p><h3 id="step-4-review-tools-and-mcp-trust">Step 4: Review Tools And MCP Trust</h3><p>Inspect <a href="https://github.com/ibranibeny/deployAzureRocketApp/blob/main/.vscode/mcp.json">.vscode/mcp.json</a> before starting servers. Configuration is not a connectivity test and does not grant trust.</p><table><thead><tr><th>Tool surface</th><th>Included configuration</th><th>Installation checkpoint</th></tr></thead><tbody><tr><td>Microsoft Learn</td><td>HTTP <code>https://learn.microsoft.com/api/mcp</code>, server <code>microsoft-learn</code></td><td>Trust deliberately; require an actual relevant MCP call when the workflow needs Learn evidence</td></tr><tr><td>Terraform registry</td><td>Docker <code>hashicorp/terraform-mcp-server:1.3.0</code>, registry-only toolset, operations disabled</td><td>Optional unless Terraform registry evidence is relevant; Docker and reviewed image must already exist</td></tr><tr><td>Azure guidance</td><td>Agent references <code>com.microsoft/azure</code></td><td>Not included in MCP JSON; supply approved Azure MCP integration with matching registered tool names</td></tr><tr><td>Browser checks</td><td>Coordinator references <code>microsoft/playwright-mcp</code></td><td>Not included in MCP JSON; supply approved integration for separately scoped frontend checks</td></tr><tr><td>Local edit/execute</td><td>VS Code host capabilities</td><td>Check each worker's actual tools; <code>edit</code> does not guarantee <code>apply_patch</code> is exposed</td></tr></tbody></table><p>The Terraform configuration uses <code>--pull=never</code>, <code>ENABLE_TF_OPERATIONS=false</code> and <code>--toolsets=registry</code>. It is version-tagged, <strong>not digest-pinned</strong>. Missing Docker/image or an unreviewed image blocks that dependency; no automatic pull, install or Terraform operation is authorized.</p><p>Use VS Code's MCP server management to inspect the registered names, startup state, trust prompt and available tools. Extension/server aliases can differ between environments. Review any necessary configuration change explicitly; never grant all tools just to remove an error. The package is not a Windows MCP sandbox.</p><h3 id="step-5-check-agent-discovery-and-tool-exposure">Step 5: Check Agent Discovery And Tool Exposure</h3><p>Open Chat's agent picker and select <strong>deployAzureRocketApp</strong>. The three worker names must also be discoverable by the host. If the entry is absent, check that the project root is open, frontmatter is valid, the filename ends in <code>.agent.md</code>, and your host enables custom agents. Reload VS Code only after checking those basics.</p><p>Ask for a local-only readiness inspection:</p><pre><code class="language-text">Inspect this harness locally. Verify the four operational agents, two skills,
+scoped instructions and referenced documentation. Report configured versus
+actually available models and tools, especially A's apply_patch capability.
+Do not access Azure, install tools, execute source scripts or start deployment.
+</code></pre><p>If actual A tool exposure needs a worker invocation, request a separate <strong>local inspect-only</strong> task with an absolute deadline and no cloud access. Its result must distinguish requested model from host-selected evidence. Do not infer worker capabilities from the coordinator's tools.</p><p><strong>Known host limitation:</strong> A lacked <code>apply_patch</code> in the author's evaluation despite its <code>edit</code> alias. This package preserves that requirement; it does not claim to repair host exposure. If it recurs, stop and resolve host/configuration compatibility with the operator. Do not use another worker or shell writer to impersonate A's plan authoring.</p><h3 id="step-6-verify-installation-not-deployment">Step 6: Verify Installation, Not Deployment</h3><p>Installation is ready for source-only use when the files are discoverable, instructions and skills can be read, relative references resolve, and tool/model limitations are honestly recorded. Readiness for cloud execution is a later and stricter checkpoint. No legacy collector, PowerShell runner or passing legacy test suite is required to install this package.</p><h2 id="5-worked-tutorial-analyzeyoursqllogwitharc">5. Worked Tutorial: AnalyzeYourSQLLogwithArc</h2><p>This is a guided deployment workflow, not a claim that the example has already passed. Use your own explicitly confirmed Azure identity and resources. No tenant, subscription, principal, resource group or frontend hostname from the author's private evaluation is included.</p><h3 id="step-1-state-the-goal-and-learn-the-source">Step 1: State The Goal And Learn The Source</h3><p>With <strong>deployAzureRocketApp</strong> selected, submit:</p><pre><code class="language-text">Learn https://github.com/ibranibeny/AnalyzeYourSQLLogwithArc.
+I want to deploy the described SQL log analysis lab, not publish its website.
+First resolve main to an immutable commit, review the native deployment
+instructions and complete dependencies, and list prerequisites, ownership,
+licenses and policy conflicts. Public source reads only. Do not access Azure,
+execute scripts, install prerequisites or deploy yet.
+</code></pre><p>Expected output: a pinned source identity, native deployment outline, dependency review coverage and unresolved prerequisites. Partial reading must be labeled Partial, not complete learning. The package's reviewed baseline was <code>cbd317405476a334d9000353e59bf51440fad0dc</code>; that is not proof of the current <code>main</code> revision when you run the tutorial.</p><p>At that baseline the native path is <strong>subscription-scope Bicep plus PowerShell</strong>, not an azd scaffold. It creates the application resource group and application services, but references an <strong>existing Arc-enabled SQL Server machine</strong>. The pipeline is Arc SQL Server/AMA, Event and Perf collection rules and associations, Log Analytics, managed-identity Streamlit on App Service, Foundry inference, KQL validation, and Microsoft Learn grounding.</p><p>Repository Learning must inspect this actual path. Do not rewrite the infrastructure into Terraform merely because Terraform tools exist. The source baseline uses B1 for App Service and a <code>gpt-5.4-mini</code> deployment; current availability, quota, source settings and cost need fresh review, not assumptions from the example.</p><h3 id="step-2-review-skills-and-external-dependencies">Step 2: Review Skills And External Dependencies</h3><p>Ask the coordinator to apply the bundled Awesome Copilot review only after source review. Candidate methods require pinned content, hashes, licenses and compatibility decisions. A missing suitable candidate is a recorded gap, not permission to invent one or install unrelated global skills.</p><p>Read the prerequisites and manual actions. The Arc host, SQL instance/database and extensions have their own owner and scope. Application-group permission does not grant guest SQL permissions, permission to start the host, or authority to change shared infrastructure. A <code>ResourceGroupNotFound</code> or disconnected Arc result must stop the affected path rather than trigger discovery of another target.</p><h3 id="step-3-confirm-scope-and-read-consent">Step 3: Confirm Scope And Read Consent</h3><p>Request deployment preparation and provide your actual values through the coordinator's questions:</p><pre><code class="language-text">Prepare an Azure deployment plan for the reviewed lab, without deploying.
+Ask me to confirm tenant, subscription, application resource group, region,
+expected signed-in principal, accountable owner, budget and whether resources
+already exist. Keep the Arc/SQL prerequisite as a separately confirmed scope.
+Ask for bounded read consent before Azure preflight. Do not infer permission
+from repository defaults or an earlier run.
+</code></pre><p>Review each target value. State a capped budget with amount/currency/window, an explicitly uncapped decision, or unresolved status; an omitted amount is never unlimited. Confirm lab versus production and the exact existing/new resource boundary. Consent to reads is separate from mutation approval. Never paste passwords, tokens or connection secrets into chat or run artifacts.</p><h3 id="step-4-a-prepares-and-stops">Step 4: A Prepares And Stops</h3><p>A should verify current identity and approved prerequisite evidence, installed tools, provider registration, relevant SKU restrictions and quota/usage. Unknown quota is not unlimited; available quota does not reserve capacity. Missing tools, registration, guest permissions or model receipts are blockers, not permission to install, grant roles or change regions.</p><p>Require an A-owned exact plan with ordered native steps, source/dependency/input hashes, executable arguments and working directory, target/owner, manual actions, expected effects, bounds, cost assumptions, preview and acceptance checks. The coordinator cannot write that plan on A's behalf when A's edit tool is unavailable.</p><p>For an existing installation, do not delete it as an implicit part of deployment. Teardown needs its own exact owned-resource boundary, dependency/data-retention review, preview and approval. Preserving the shared Arc/SQL host is distinct from deleting application services.</p><h3 id="step-5-review-policy-compatibility-and-approvals">Step 5: Review Policy Compatibility And Approvals</h3><p>Review the <a href="https://github.com/ibranibeny/deployAzureRocketApp/blob/main/docs/reference/l400-pre-deployment-review.md">pre-deployment gates</a> before execution. In this package, selecting an agent, saying deploy, a valid JSON file or a top-level approval does not authorize all transitive effects.</p><p>Native source execution needs an explicit exception covering the exact pinned files, dependencies and effects <strong>where controlling policy permits it</strong>. That is separate from exact-plan chat approval and independent host terminal confirmation for each mutation. No exception overrides a higher-priority prohibition. A preview and approval must be less than 30 minutes old, and changed inputs require renewal.</p><p><strong>Important example limitation:</strong> at the reviewed baseline, <code>Run-Simulations.ps1</code> changes InsuranceDB and starts two concurrent sessions; its helpers can install extensions, retry mutations, poll/wait and clean up transient resources. These effects conflict with the current harness restrictions. The unchanged simulation must return <strong>BlockedPolicy</strong>. A real deadlock requires concurrent transactions; a sequential rewrite is not equivalent. This guide does not provide a bypass or promise full workshop completion under incompatible policy.</p><p>If the plan is compatible and every operational gate is satisfied, review the exact hash, target, commands and effects that the coordinator presents, then approve that specific plan. Do not use a generic approval prompt from documentation as a reusable authorization token.</p><h3 id="step-6-execute-only-the-approved-plan">Step 6: Execute Only The Approved Plan</h3><p>The coordinator starts a new A execute invocation with the reviewed bindings and host evidence. A rechecks identity and inputs, obtains the independent host confirmations, attempts each approved mutation once, and records sanitized command receipts, timestamps, exit codes and operation IDs.</p><p>No other worker mutates or observes during A's mutation phase. A failure, cancellation, timeout or uncertain outcome stops dependent writes. Do not retry automatically; request a separately scoped read-only reconciliation. A local timeout is not proof that a remote operation stopped.</p><p>If a required gate cannot be satisfied, stop at the blocked result. Do not keep issuing the same preparation task without a changed condition, and do not interpret a blocked report as a reset or a successful installation.</p><h3 id="step-7-observe-and-verify-the-application">Step 7: Observe And Verify The Application</h3><p>After A is quiescent, authorize bounded C observations with an absolute deadline, approved request list, page/request/time limits and scope. Cost collection and subscription Service Health need their own coverage. C returns evidence; the coordinator validates and saves a Snapshot. B drafts and then finalizes after available readback results.</p><p>Require separate checks for:</p><table><thead><tr><th>Layer</th><th>Passing evidence must address</th></tr></thead><tbody><tr><td>Infrastructure and artifact</td><td>Expected resources plus the actual deployed package/configuration identity</td></tr><tr><td>Arc and collection</td><td>Connected authorized machine; correct AMA, DCR streams/destinations and associations</td></tr><tr><td>Fresh telemetry</td><td>Direct machine/time-filtered Event/Perf counts and latest timestamps within an agreed freshness window</td></tr><tr><td>Runtime identity</td><td>Correct managed identity and scoped access to Logs and inference</td></tr><tr><td>Inference and guard</td><td>Actual model response; valid bounded KQL; approved negative test rejected before backend execution</td></tr><tr><td>Logs and grounding</td><td>Successful relevant query/results, actual Learn retrieval, appropriate citations</td></tr><tr><td>Frontend and answer</td><td>Real authenticated/access workflow and workload-relevant final answer</td></tr></tbody></table><p>Empty successful query results are not fresh telemetry. ResourceHealth is not application health. For SQL Server on Arc, a recommendation to use Azure SQL Database's AzureSQLDeadlocks table instead of the source-supported Event/Perf workflow fails answer relevance even when inference and transport succeed.</p><h3 id="step-8-open-the-frontend-from-the-report">Step 8: Open The Frontend From The Report</h3><p>Ask B to report the actual App Service URL from this run's evidence, its observation time and tested authentication/access requirements. Do not derive a hostname from an example or reuse a previous run's URL.</p><p>For the reviewed Streamlit workflow, open the reported URL, complete its documented authentication if required, and enter a bounded source-grounded question such as:</p><pre><code class="language-text">What official Microsoft guidance applies to recent SQL deadlocks?
+</code></pre><p>Inspect <strong>Generated KQL</strong>, <strong>Validation</strong>, <strong>Logs result</strong>, <strong>Microsoft Learn grounding</strong>, and <strong>Final answer</strong>. Verify citations apply to your Arc SQL Server and the query allowlist, not just that the links are official. A new billable question or negative test must be included in the approved verification scope. No sign-in prompt in one browser session does not prove universal anonymous access.</p><p>This repository's GitHub Pages URL is documentation, not the deployed application frontend. If deployment was blocked, the report must say no new deployment URL exists; it may identify an existing URL only with its historical/current evidence clearly labeled.</p><h3 id="step-9-close-the-run-honestly">Step 9: Close The Run Honestly</h3><p>Read <code>runs/&lt;runId&gt;/installation.md</code> locally. It should retain the source/commit, scope, model evidence, reviewed methods, actual commands, approvals, failures, per-layer checks, frontend access, costs and unresolved actions. Failed or unavailable observation must not prevent B from writing a final blocked/partial report.</p><p>For a final clean-environment test, separately authorize teardown only after identifying exact owned resources and retaining required evidence. Verify deletion with fresh readback before recreation; a submitted delete request is not absence proof. Soft-delete and name-reuse constraints can prevent immediate recreation. Shared SQL/VM changes, purges and redeployment are never implied by application deletion approval.</p><h2 id="6-outputs-and-troubleshooting">6. Outputs And Troubleshooting</h2><h3 id="runtime-artifacts">Runtime Artifacts</h3><pre><code class="language-text">runs/&lt;runId&gt;/
+  context.json
+  sources/
+  candidate-manifest.json
+  deployment-plan.json
+  preflight/
+  iac/
+  command-evidence.jsonl
+  observations/&lt;invocationId&gt;/observations.json
+  observations/&lt;invocationId&gt;/dashboard.html
+  installation.md
+</code></pre><p>These are expected locations created as phases run, not files shipped in the repository or proof that a phase occurred. A proposed path does not exist until its owner successfully writes it. <code>runs/</code> is ignored by Git; review/redact any separate report sharing deliberately.</p><table><thead><tr><th>Symptom</th><th>Correct next action</th></tr></thead><tbody><tr><td>Agent absent from picker</td><td>Check project root, filename/frontmatter, custom-agent support and duplicate names</td></tr><tr><td>Skill not applied</td><td>Confirm its exact folder/file, description and relevance; ask for explicit local use without cloud access</td></tr><tr><td>Required model unavailable</td><td>Resolve entitlement/host compatibility; no silent model substitution</td></tr><tr><td>A lacks apply_patch</td><td>Stop before plan authoring; resolve host exposure without another writer or widened permissions</td></tr><tr><td>MCP configured but failing</td><td>Inspect trust, registered tool names, connectivity and applicable documentation; configuration is not acceptance evidence</td></tr><tr><td>Arc target not found</td><td>Reconfirm exact authorized Arc scope; do not guess another target or assume a VM power state</td></tr><tr><td>Preview or permissions unavailable</td><td>Keep preparation Blocked; do not use a mutation to test permission</td></tr><tr><td>Native script conflicts with policy</td><td>Record transitive effects; require an explicitly reviewed compatible scope/revision where permitted</td></tr><tr><td>Query succeeds with zero rows</td><td>Report NoData/freshness uncertainty, not healthy ingestion; no automatic workload generation</td></tr><tr><td>Answer has irrelevant official citations</td><td>Fail relevance separately from transport; propose reviewed repair, not success</td></tr><tr><td>Costs unavailable</td><td>Report Unknown/Unavailable with collection limits, never zero or free operation</td></tr></tbody></table><h3 id="meaning-of-status">Meaning Of Status</h3><p><strong>Planned</strong> means a proposal exists. <strong>Attempted</strong> requires execution evidence. <strong>Verified</strong> requires matching observed criteria. <strong>Blocked</strong> identifies an unmet prerequisite or authorization. <strong>Failed</strong> retains an unsuccessful performed check. <strong>Pending</strong> is not yet performed. <strong>Unavailable</strong> means evidence could not be collected. Synthetic fixtures never become live evidence.</p><h2 id="7-references-and-boundaries">7. References And Boundaries</h2><ul><li><a href="https://github.com/ibranibeny/deployAzureRocketApp/blob/main/docs/how-to/run-azure-rocket.md">Operational workflow</a></li><li><a href="https://github.com/ibranibeny/deployAzureRocketApp/blob/main/docs/reference/l400-pre-deployment-review.md">Standalone pre-deployment safety reference</a></li><li><a href="https://github.com/ibranibeny/deployAzureRocketApp/blob/main/.github/agents/azure-rocket-workflow.agent.md">Coordinator definition</a></li><li><a href="https://github.com/ibranibeny/deployAzureRocketApp/blob/main/.github/agents/azure-rocket-a-deploy.agent.md">A Deploy</a>, <a href="https://github.com/ibranibeny/deployAzureRocketApp/blob/main/.github/agents/azure-rocket-b-report.agent.md">B Report</a>, <a href="https://github.com/ibranibeny/deployAzureRocketApp/blob/main/.github/agents/azure-rocket-c-observe.agent.md">C Observe</a></li><li><a href="https://github.com/ibranibeny/AnalyzeYourSQLLogwithArc">Example workload repository</a></li><li><a href="https://code.visualstudio.com/docs/copilot/customization/custom-agents">VS Code custom-agent documentation</a></li><li><a href="https://code.visualstudio.com/docs/copilot/customization/agent-skills">VS Code agent-skill documentation</a></li></ul><p>The package contains no legacy mutation adapter. <code>DisabledPendingApprovalAdapter</code> remains a historical disabled experiment, not a feature flag or an operational prerequisite. The direct-tool workflow must satisfy its own gates and is not a trusted approval enforcement service. Packaging, publication and a working guide website do not prove Azure execution readiness.</p></article>
+      <footer class="endnote">Documentation edition 16 September 2026. <a href="https://github.com/ibranibeny/deployAzureRocketApp/blob/main/docs/guide.md">Read the Markdown source</a>.</footer>
+    </main>
+  </div>
+  <script>
+    (() => {
+      const media = window.matchMedia("(prefers-color-scheme: dark)");
+      const themeSelect = document.querySelector("#theme");
+      const queryTheme = new URLSearchParams(location.search).get("scoutTheme");
+      themeSelect.value = ["light", "dark"].includes(queryTheme) ? queryTheme : "system";
+      const applyTheme = () => {
+        document.documentElement.dataset.theme = themeSelect.value === "system"
+          ? (media.matches ? "dark" : "light") : themeSelect.value;
+      };
+      themeSelect.addEventListener("change", applyTheme);
+      media.addEventListener("change", applyTheme);
+      applyTheme();
+      const contents = document.querySelector(".contents");
+      if (window.matchMedia("(max-width: 800px)").matches) contents.open = false;
+      const links = [...document.querySelectorAll('[aria-label="Chapters"] a')];
+      links.forEach(link => link.addEventListener("click", () => {
+        if (window.matchMedia("(max-width: 800px)").matches) contents.open = false;
+      }));
+      if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            links.forEach(link => {
+              if (link.hash === `#${entry.target.id}`) link.setAttribute("aria-current", "location");
+              else link.removeAttribute("aria-current");
+            });
+          });
+        }, { rootMargin: "-5% 0px -70% 0px" });
+        document.querySelectorAll("article h2").forEach(heading => observer.observe(heading));
+      }
+      document.querySelectorAll("article table").forEach((table, index) => {
+        const region = document.createElement("div");
+        region.className = "table-scroll";
+        region.tabIndex = 0;
+        region.setAttribute("role", "region");
+        region.setAttribute("aria-label", `Reference table ${index + 1}`);
+        table.before(region);
+        region.append(table);
+      });
+    })();
+  </script>
+  <script type="module">
+    const source = document.querySelector("pre.mermaid");
+    if (source) {
+      const figure = document.createElement("figure");
+      figure.className = "workflow";
+      const visual = document.createElement("div");
+      visual.className = "workflow-visual";
+      visual.tabIndex = 0;
+      visual.setAttribute("role", "region");
+      visual.setAttribute("aria-label", "Agent workflow diagram");
+      const caption = document.createElement("figcaption");
+      caption.textContent = "Rendering workflow. The source remains below.";
+      caption.setAttribute("role", "status");
+      source.before(figure);
+      figure.append(visual, caption, source);
+      try {
+        const { default: mermaid } = await import("https://cdn.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.esm.min.mjs");
+        mermaid.initialize({ startOnLoad: false, securityLevel: "strict", theme: "neutral", flowchart: { htmlLabels: false } });
+        const result = await mermaid.render("agent-workflow", source.textContent);
+        visual.innerHTML = result.svg;
+        caption.textContent = "Figure 1. Source learning, approval, execution and evidence ownership.";
+        const details = document.createElement("details");
+        const summary = document.createElement("summary");
+        summary.textContent = "Mermaid source";
+        figure.append(details);
+        details.append(summary, source);
+      } catch {
+        caption.textContent = "The diagram renderer is unavailable. Read the workflow source below.";
+      }
+    }
+  </script>
+</body>
+</html>
